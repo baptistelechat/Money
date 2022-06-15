@@ -2,6 +2,7 @@ import { ActionIcon } from "@mantine/core";
 import { keyframes, styled } from "@stitches/react";
 import { useEffect, useState } from "react";
 import { ChevronUp } from "tabler-icons-react";
+import "./style.css";
 
 const backOnTopAnimation = keyframes({
   from: { transform: "translateY(3px)" },
@@ -13,7 +14,7 @@ const StyledIcon = styled(ChevronUp, {
 });
 
 const BackOnTop = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [backOnTopClassName, setBackOnTopClassName] = useState("back-on-top");
   const [breakpoint, setBreakpoint] = useState(0);
 
   useEffect(() => {
@@ -21,38 +22,36 @@ const BackOnTop = () => {
     home !== null ? setBreakpoint(home.offsetHeight) : null;
   }, []);
 
+  console.log(breakpoint);
+
   const toggleVisible = () => {
-    const scrolled = document.documentElement.scrollTop;
-    if (scrolled > breakpoint / 2) {
-      setIsVisible(true);
-    } else if (scrolled <= breakpoint / 2) {
-      setIsVisible(false);
+    const scrolled = window.pageYOffset;
+    if (scrolled >= breakpoint / 2) {
+      setBackOnTopClassName("back-on-top enterAnimation");
+    } else if (backOnTopClassName === "back-on-top enterAnimation") {
+      setBackOnTopClassName("back-on-top exitAnimation");
+    } else if (
+      backOnTopClassName !== "back-on-top enterAnimation" &&
+      backOnTopClassName !== "back-on-top exitAnimation"
+    ) {
+      setBackOnTopClassName("back-on-top");
     }
   };
 
   window.addEventListener("scroll", toggleVisible);
 
-  const scrollButton = (): JSX.Element => {
-    return (
-      <ActionIcon
-        color={"blue"}
-        radius={"xl"}
-        size={"xl"}
-        variant={"filled"}
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: "1",
-        }}
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        <StyledIcon />
-      </ActionIcon>
-    );
-  };
-
-  return isVisible ? scrollButton() : <div></div>;
+  return (
+    <ActionIcon
+      className={backOnTopClassName}
+      color={"blue"}
+      radius={"xl"}
+      size={"xl"}
+      variant={"filled"}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+    >
+      <StyledIcon />
+    </ActionIcon>
+  );
 };
 
 export default BackOnTop;

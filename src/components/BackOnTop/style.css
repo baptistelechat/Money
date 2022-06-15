@@ -1,0 +1,36 @@
+.back-on-top {
+  position: fixed;
+  bottom: 20px;
+  right: -50px;
+  z-index: 1;
+}
+
+.back-on-top:hover {
+  transform: rotate(180deg);
+}
+
+.enterAnimation {
+  animation: enterAnimation 0.5s ease forwards;
+}
+
+.exitAnimation {
+  animation: exitAnimation 0.5s ease forwards;
+}
+
+@keyframes enterAnimation {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-70px);
+  }
+}
+
+@keyframes exitAnimation {
+  0% {
+    transform: translateX(-70px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
